@@ -4,6 +4,7 @@ const DotenvWebpack = require('dotenv-webpack')
 const webpack = require('webpack')
 
 const path = require('path')
+const { Stats } = require('fs')
 
 
 module.exports = {
@@ -29,9 +30,13 @@ module.exports = {
         ]
       },
       {
-          test: /\.(ts|tsx)$/,
-          use: 'ts-loader',
-          exclude: /node_modules/,
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader'
+          }
+        ]
       },
       {
         test: /\.html$/,
@@ -55,6 +60,9 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -63,9 +71,7 @@ module.exports = {
     new MiniCssExtractPlugin(),
     new DotenvWebpack(),
     new webpack.DefinePlugin({
-      "process.env": {
-        "NODE_ENV": JSON.stringify(process.env.NODE_ENV)
-      }
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
     })
   ]
 }
