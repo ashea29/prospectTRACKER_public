@@ -1,14 +1,41 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
+import store from './state/configureStore'
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
+import firebaseConfig from './state/fbconfig'
+import App from './App'
+
+
+
+const rrfConfig = {
+  userProfile: "users",
+  useFirestoreForProfile: true,
+};
+
+firebase.initializeApp(firebaseConfig)
+firebase.firestore()
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+}
 
 
 ReactDOM.render(
     <React.StrictMode>
-      <Router>
-        <App />
-      </Router>
+      <Provider store={store}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <Router>
+            <App />
+          </Router>
+        </ReactReduxFirebaseProvider>
+      </Provider>
     </React.StrictMode>,
    document.getElementById('root')
 )

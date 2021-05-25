@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import { RootState } from '../configureStore'
 
 
-const fetchProspectsByUserId = createAsyncThunk(
+const fetchTodosByUserId = createAsyncThunk(
   'prospects/fetchProspectsByUserId',
   async (id: number, thunkAPI: any) => {
     setTimeout(() => {
@@ -11,44 +11,44 @@ const fetchProspectsByUserId = createAsyncThunk(
   }
 )
 
-const ProspectsSlice = createSlice({
-  name: 'Prospects',
+const TodosSlice = createSlice({
+  name: 'Todos',
   initialState: {
     userId: '',
     isLoading: false,
     lastFetch: null,
-    prospects: []
+    todos: []
   },
   reducers: {
-    ADD_PROSPECT: (state, { payload }) => {
-      state.prospects.push(payload)
+    ADD_TODO: (state, { payload }) => {
+      state.todos.push(payload)
     },
-    DELETE_PROSPECT: (state, { payload }) => {
-      state.prospects.splice(payload, 1)
+    DELETE_TODO: (state, { payload }) => {
+      state.todos.splice(payload, 1)
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchProspectsByUserId.pending, (state, action) => {
+    builder.addCase(fetchTodosByUserId.pending, (state, action) => {
       state.isLoading = true
       console.log(`Pending action: ${action.payload}`)
     })
-    builder.addCase(fetchProspectsByUserId.fulfilled, (state, action) => {
+    builder.addCase(fetchTodosByUserId.fulfilled, (state, action) => {
       state.isLoading = false
       console.log(`Fulfilled action: ${action.payload}`)
     })
-    builder.addCase(fetchProspectsByUserId.rejected, (state, action) => {
+    builder.addCase(fetchTodosByUserId.rejected, (state, action) => {
       state.isLoading = false
       console.log(`Rejected action: ${action.payload}`)
     })
   }
 })
 
-export const { ADD_PROSPECT, DELETE_PROSPECT } = ProspectsSlice.actions
+export const { ADD_TODO, DELETE_TODO } = TodosSlice.actions
 
 export const selectProspects = createSelector(
-  (state: RootState) => state.entities.prospects.prospects,
-  (prospects) => prospects
+  (state: RootState) => state.entities.todos.todos,
+  (todos) => todos
 )
 
 
-export default ProspectsSlice.reducer
+export default TodosSlice.reducer
