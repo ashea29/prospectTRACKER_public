@@ -19,7 +19,8 @@ const Header = () => {
                 </a>
               </span> */}
                 <li id="home"><Link to='/'>Home</Link></li>
-                <li id="my_account"><Link to='/login'>Login</Link></li>
+                <li id="createProspect"><Link to='/new-prospect'>Add New Prospect</Link></li>
+                <li id="login"><Link to='/login'>Login</Link></li>
                 <li id="sign_up"><Link to='/signup'>Sign Up</Link></li>
             </ul>
         </nav>

@@ -20,7 +20,7 @@ const Home: React.FC = () => {
               </div>
               <div id="link-container">
                 <Link to="/signup"><button>Get Started</button></Link>
-              <div>Already registered? <Link to='/login'>Login</Link></div>
+                <div>Already registered? <Link to='/login'>Login</Link></div>
             </div>
         </div>
       </div>
