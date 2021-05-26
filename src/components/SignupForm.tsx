@@ -1,10 +1,14 @@
 import { Formik, Form, Field } from 'formik'
+import { useFirebase } from 'react-redux-firebase'
 import { Link, useHistory } from 'react-router-dom'
+import { useAppSelector } from '../state/hooks'
 import validator from 'validator'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
 
 import './SignupForm.css'
+import { RootState } from '../state/configureStore'
+import { useEffect } from 'react'
 
 
 const showError = (errorText: string) => {
@@ -20,7 +24,26 @@ interface FormComponentProps {
 }
 
 const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
+  
+ 
   const history = useHistory()
+  const firebase = useFirebase()
+  
+
+
+
+  const signUp = async (props: { firstName: string, username: string, email: string, password: string}) => {
+
+    try {
+      await firebase.createUser({
+        email: props.email,
+        password: props.password
+      })
+      history.push('/dashboard')
+    } catch (error) {
+      console.log(error)
+    } 
+  }
 
   const handleBackNavigation = () => {
     history.goBack()
@@ -31,6 +54,7 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
       initialValues={{
         firstName: '',
         username: '',
+        email: '',
         password: '',
         confirmPassword: '',
       }}
@@ -40,17 +64,19 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
         const sanitizedData = {
           firstName: validator.escape(data.firstName).trim(),
           username: validator.escape(data.username).trim(),
+          email: validator.escape(data.email).trim(),
           password: validator.escape(data.password).trim(),
           confirmPassword: validator.escape(data.confirmPassword).trim()
         }
         setSubmitting(true)
-        await new Promise(() =>
-          setTimeout(() => {
-            console.log(sanitizedData)
-            setSubmitting(false)
-            resetForm()
-          }, 2000)
-        )
+        await signUp({
+          firstName: sanitizedData.firstName,
+          username: sanitizedData.username,
+          email: sanitizedData.email,
+          password: sanitizedData.password
+        })
+        setSubmitting(false)
+        resetForm()
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
@@ -76,6 +102,17 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
             />
             {errors.username && touched.username ? (
               showError(errors.username)
+            ) : null}
+          <Field
+              id='email'
+              placeholder='Enter email'
+              name='email'
+              type='email'
+              value={values.email}
+              as={FormInput}
+            />
+            {errors.email && touched.email ? (
+              showError(errors.email)
             ) : null}
             <Field
               id='password'
