@@ -1,11 +1,18 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import entitiesReducer from './entitiesReducer'
 import authReducer from './auth/auth'
-import { firebaseReducer } from 'react-redux-firebase'
-import { firestoreReducer } from 'redux-firestore'
+import { firebaseReducer, FirebaseReducer } from 'react-redux-firebase'
+import { firestoreReducer, FirestoreReducer } from 'redux-firestore'
 
 
-export default combineReducers({
+interface RootReducerTypes {
+  firebase: FirebaseReducer.Reducer
+  firestore: FirestoreReducer.Reducer
+  auth: any
+  entities: any
+}
+
+export default combineReducers<RootReducerTypes>({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
   auth: authReducer,

@@ -1,8 +1,10 @@
 import { Formik, Form, Field } from 'formik'
 import { Link, useHistory } from 'react-router-dom'
+import { useFirebase } from 'react-redux-firebase'
 import validator from 'validator'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
+
 
 
 
@@ -19,7 +21,26 @@ interface FormComponentProps {
 }
 
 const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
+  
   const history = useHistory()
+  const firebase = useFirebase()
+
+
+
+
+  const signIn = async (props: { email: string, password: string}) => {
+    
+    try {
+      await firebase.login({
+        email: props.email,
+        password: props.password
+      })
+      history.push('/dashboard')
+    } catch (error) {
+      console.log(error)
+    } 
+  }
+
 
   const handleBackNavigation = () => {
     history.goBack()
@@ -28,38 +49,34 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
   return (
     <Formik
       initialValues={{
-        username: '',
+        email: '',
         password: '',
       }}
       validationSchema={schema}
       onSubmit={async (data, { setSubmitting, resetForm }) => {
         // console.log(data);
         const sanitizedData = {
-          username: validator.escape(data.username).trim(),
+          email: validator.escape(data.email).trim(),
           password: validator.escape(data.password).trim(),
         }
         setSubmitting(true)
-        await new Promise(() =>
-          setTimeout(() => {
-            console.log(sanitizedData)
-            setSubmitting(false)
-            resetForm()
-          }, 2000)
-        )
+        await signIn({email: sanitizedData.email, password: sanitizedData.password})
+        setSubmitting(false)
+        resetForm()
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
         <Form className='ion-padding'>
             <Field
-              id='username'
-              placeholder='Username'
-              name='username'
+              id='email'
+              placeholder='Email'
+              name='email'
               type='input'
-              value={values.username}
+              value={values.email}
               as={FormInput}
             />
-            {errors.username && touched.username ? (
-              showError(errors.username)
+            {errors.email && touched.email ? (
+              showError(errors.email)
             ) : null}
             <Field
               id='password'

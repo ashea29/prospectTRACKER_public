@@ -27,9 +27,6 @@
 
 #menu > ul > li {
   margin: 0 1rem;
-}
-
-#menu > ul > li > a {
   padding: 0.5rem 0.7rem;
   border-radius: 5px;
   font-family: 'Poppins', sans-serif;
@@ -38,6 +35,21 @@
   transition: all 0.3s ease;
 }
 
+#menu > ul > li > a, #logout {
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+
+#logout:hover {
+  background-color: #fff;
+  color: #422132;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
 
 #menu > ul > li > a:hover {
   background-color: #fff;

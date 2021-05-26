@@ -1,18 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import LoginForm from '../components/LoginForm'
+import { useAppSelector } from '../state/hooks'
 
 import './Login.css'
 
 
 const LoginSchema = yup.object().shape({
-  username: yup.string()
-    .required('Username is required'),
+  email: yup.string()
+    .required('Email is required'),
   password: yup.string()
     .required('Password is required'),
 })
 
 const Login: React.FC = () => {
+  const auth = useAppSelector((state) => state.firebase.auth)
+
+  useEffect(() => {
+    console.log(auth)
+  }, [])
+  
   return (
     <div className='login-container'>
       <div className="login-card">
