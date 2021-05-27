@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 import { RootState } from '../configureStore'
 
 
-const fetchProspectsByUserId = createAsyncThunk(
+export const fetchProspectsByUserId = createAsyncThunk(
   'prospects/fetchProspectsByUserId',
   async (id: number, thunkAPI: any) => {
     setTimeout(() => {

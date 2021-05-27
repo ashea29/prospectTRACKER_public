@@ -17,7 +17,7 @@ const store = configureStore({
     },
     immutableCheck: true,
     serializableCheck: false
-  }),
+  }).concat(logger),
 })
 
 export type RootState = ReturnType<typeof store.getState>

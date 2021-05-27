@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import SignupForm from '../components/SignupForm'
-import { RootState } from '../state/configureStore'
 import { useAppSelector } from '../state/hooks'
 
 import './Signup.css'
@@ -27,7 +26,7 @@ const Signup: React.FC = () => {
   const auth = useAppSelector((state) => state.firebase.auth)
 
   useEffect(() => {
-    console.log('Auth: ', auth)
+    console.log(`Auth: ${JSON.stringify(auth)}`)
   }, [])
   
   return (

@@ -13,16 +13,22 @@ const LoginSchema = yup.object().shape({
     .required('Password is required'),
 })
 
-const Login: React.FC = () => {
+const Login: React.FC = (props: any) => {
+  const { state = {} } = props.location
+  const { from , message } = state
   const auth = useAppSelector((state) => state.firebase.auth)
 
   useEffect(() => {
-    console.log(auth)
+    console.log(`'FROM' prop: ${from}`)
+    console.log(`Auth: ${JSON.stringify(auth)}`)
   }, [])
   
   return (
     <div className='login-container'>
-      <div className="login-card">
+      <div className='login-card'>
+        {message &&
+          <div className='redirect-message'>{message}</div>
+        }
         <LoginForm schema={LoginSchema}/>
       </div>
     </div>
