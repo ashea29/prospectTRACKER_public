@@ -15,7 +15,6 @@ import App from './App'
 const rrfConfig = {
   userProfile: "users",
   useFirestoreForProfile: true,
-  enableClaims: true,
   oneListenerPerPath: true
 };
 

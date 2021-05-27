@@ -14,3 +14,12 @@
   width: 19%;
   height: 50%;
 }
+
+.redirect-message {
+  border-radius: 5px;
+  background-color: rgba(171, 147, 159, 0.3);
+  color: #422132;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}

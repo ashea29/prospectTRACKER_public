@@ -1,32 +1,40 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
+import React, { Suspense } from 'react'
+import { Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
-import Home from './pages/Home'
-import Signup from './pages/Signup'
-import NewProspect from './pages/NewProspect'
-
-import './App.css'
-import Login from './pages/Login'
+// import Home from './pages/Home'
+const Home = React.lazy(() => import('./pages/Home'))
+// import Login from './pages/Login'
+const Login = React.lazy(() => import('./pages/Login'))
+// import Signup from './pages/Signup'
+const Signup = React.lazy(() => import('./pages/Signup'))
+// import NewProspect from './pages/NewProspect'
+const NewProspect = React.lazy(() => import('./pages/NewProspect'))
+// import Dashboard from './pages/Dashboard'
+const Dashboard = React.lazy(() => import('./pages/Dashboard'))
 import ProtectedRoute from './shared/ProtectedRoute'
-import Dashboard from './pages/Dashboard'
+import './App.css'
+import LoadingSpinner from './shared/LoadingSpinner'
+
 
 
 
 const App: React.FC = () => {
-
   return (
     <React.Fragment>
       <Header />
-      <Route exact path='/' component={Home}/>
-      <Route exact path='/login' component={Login}/>
-      <Route exact path='/signup' component={Signup}/>
-      <ProtectedRoute exact path='/new-prospect'>
-        <NewProspect />
-      </ProtectedRoute>
-      <ProtectedRoute exact path='/dashboard'>
-        <Dashboard />
-      </ProtectedRoute>
-      
+      <Suspense fallback={<div className='centered'><LoadingSpinner /></div>}>
+        <Switch>
+          <Route exact path='/' component={Home}/>
+          <Route exact path='/login' component={Login}/>
+          <Route exact path='/signup' component={Signup}/>
+          <ProtectedRoute exact path='/new-prospect'>
+            <NewProspect />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/dashboard'>
+            <Dashboard />
+          </ProtectedRoute>
+        </Switch>
+      </Suspense>
     </React.Fragment>
   )
 }

@@ -5,7 +5,9 @@ import validator from 'validator'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
 
-
+import './LoginForm.css'
+import { useAppDispatch } from '../state/hooks'
+import { login } from '../state/auth/auth'
 
 
 const showError = (errorText: string) => {
@@ -21,24 +23,25 @@ interface FormComponentProps {
 }
 
 const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
-  
+  const dispatch = useAppDispatch()
   const history = useHistory()
   const firebase = useFirebase()
-
-
-
+  
 
   const signIn = async (props: { email: string, password: string}) => {
-    
-    try {
-      await firebase.login({
-        email: props.email,
-        password: props.password
-      })
-      history.push('/dashboard')
-    } catch (error) {
-      console.log(error)
-    } 
+    // try {
+    //   await firebase.login({
+    //     email: props.email,
+    //     password: props.password
+    //   })
+    //   history.push('/dashboard')
+    // } catch (error) {
+    //   console.log(error)
+    // } 
+    dispatch(login({
+      email: props.email,
+      password: props.password
+    }))
   }
 
 

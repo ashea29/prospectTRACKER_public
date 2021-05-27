@@ -1,14 +1,13 @@
 import { Formik, Form, Field } from 'formik'
 import { useFirebase } from 'react-redux-firebase'
 import { Link, useHistory } from 'react-router-dom'
-import { useAppSelector } from '../state/hooks'
 import validator from 'validator'
+import { useAppDispatch } from '../state/hooks'
+import { signup } from '../state/auth/auth'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
 
 import './SignupForm.css'
-import { RootState } from '../state/configureStore'
-import { useEffect } from 'react'
 
 
 const showError = (errorText: string) => {
@@ -23,26 +22,38 @@ interface FormComponentProps {
   schema: object
 }
 
+interface SignupProps {
+  firstName: string
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
 const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
-  
- 
+  const dispatch = useAppDispatch()
   const history = useHistory()
   const firebase = useFirebase()
   
+  const signUp = async (props: SignupProps) => {
+    // const { firstName, username, email, password } = props
 
+    // const createNewUser = async ({ firstName, username, email, password}) => {
+    //   await firebase.createUser({ email, password }, { firstName, username, email})
+    // }
 
-
-  const signUp = async (props: { firstName: string, username: string, email: string, password: string}) => {
-
-    try {
-      await firebase.createUser({
-        email: props.email,
-        password: props.password
-      })
-      history.push('/dashboard')
-    } catch (error) {
-      console.log(error)
-    } 
+    // try {
+    //   await createNewUser({ firstName, username, email, password })
+    // } catch (error) {
+    //   return error
+    // } 
+    dispatch(signup({
+      firstName: props.firstName,
+      username: props.username,
+      email: props.email,
+      password: props.password,
+      confirmPassword: props.confirmPassword
+    }))
   }
 
   const handleBackNavigation = () => {
@@ -60,7 +71,6 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
       validationSchema={schema}
       onSubmit={async (data, { setSubmitting, resetForm }) => {
-        // console.log(data);
         const sanitizedData = {
           firstName: validator.escape(data.firstName).trim(),
           username: validator.escape(data.username).trim(),
@@ -69,12 +79,19 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
           confirmPassword: validator.escape(data.confirmPassword).trim()
         }
         setSubmitting(true)
-        await signUp({
-          firstName: sanitizedData.firstName,
-          username: sanitizedData.username,
-          email: sanitizedData.email,
-          password: sanitizedData.password
-        })
+        try {
+          await signUp({
+            firstName: sanitizedData.firstName,
+            username: sanitizedData.username,
+            email: sanitizedData.email,
+            password: sanitizedData.password,
+            confirmPassword: sanitizedData.confirmPassword
+          })
+          history.push('/dashboard')
+        } catch (error) {
+          console.log(error)
+        }
+        
         setSubmitting(false)
         resetForm()
       }}
@@ -149,11 +166,6 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
                 </p>
               </div>
             </div>
-            {/* <IonRow>
-              <IonCol>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
-              </IonCol>
-            </IonRow> */}
         </Form>
       )}
     </Formik>

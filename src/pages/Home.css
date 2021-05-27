@@ -1,11 +1,11 @@
-:root {
+/* :root {
     --primary-color: #005d49;
     --secondary-color: #009061;
     --background-color: #f9fafb;
     --highlight-color: #32639b;
     --success-color: #21a558;
     --error-color: #d82916;
-}
+} */
 
 .img-container {
     z-index: 1;
