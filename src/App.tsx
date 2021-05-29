@@ -17,7 +17,6 @@ import LoadingSpinner from './shared/LoadingSpinner'
 
 
 
-
 const App: React.FC = () => {
   return (
     <React.Fragment>

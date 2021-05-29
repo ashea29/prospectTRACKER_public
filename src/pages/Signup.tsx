@@ -25,9 +25,9 @@ const SignupSchema = yup.object().shape({
 const Signup: React.FC = () => {
   const auth = useAppSelector((state) => state.firebase.auth)
 
-  useEffect(() => {
-    console.log(`Auth: ${JSON.stringify(auth)}`)
-  }, [])
+  // useEffect(() => {
+  //   console.log(`Auth: ${JSON.stringify(auth)}`)
+  // }, [])
   
   return (
     <div className='signup-container'>

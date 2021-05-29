@@ -38,7 +38,7 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
     // } catch (error) {
     //   console.log(error)
     // } 
-    dispatch(login({
+    await dispatch(login({
       email: props.email,
       password: props.password
     }))
@@ -63,7 +63,12 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
           password: validator.escape(data.password).trim(),
         }
         setSubmitting(true)
-        await signIn({email: sanitizedData.email, password: sanitizedData.password})
+        try {
+          await signIn({email: sanitizedData.email, password: sanitizedData.password})
+        } catch (error) {
+          console.log(error)
+        }
+        // history.push('/dashboard')
         setSubmitting(false)
         resetForm()
       }}

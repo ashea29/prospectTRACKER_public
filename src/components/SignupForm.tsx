@@ -8,6 +8,7 @@ import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
 
 import './SignupForm.css'
+import { useState } from 'react'
 
 
 const showError = (errorText: string) => {
@@ -34,20 +35,11 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const firebase = useFirebase()
+
+  const [signupError, setSignupError] = useState()
   
   const signUp = async (props: SignupProps) => {
-    // const { firstName, username, email, password } = props
-
-    // const createNewUser = async ({ firstName, username, email, password}) => {
-    //   await firebase.createUser({ email, password }, { firstName, username, email})
-    // }
-
-    // try {
-    //   await createNewUser({ firstName, username, email, password })
-    // } catch (error) {
-    //   return error
-    // } 
-    dispatch(signup({
+    await dispatch(signup({
       firstName: props.firstName,
       username: props.username,
       email: props.email,
@@ -87,13 +79,17 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
             password: sanitizedData.password,
             confirmPassword: sanitizedData.confirmPassword
           })
-          history.push('/dashboard')
+          setSubmitting(false)
+          resetForm()
         } catch (error) {
-          console.log(error)
+            setSignupError(error)
+            console.log(signupError)
+            setSubmitting(false)
         }
-        
-        setSubmitting(false)
-        resetForm()
+
+        if (!signupError) {
+          history.push('/dashboard')
+        }
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
