@@ -21,10 +21,12 @@ const rrfConfig = {
 firebase.initializeApp(firebaseConfig)
 firebase.firestore()
 
+
 const rrfProps = {
   firebase,
   config: rrfConfig,
-  dispatch: store.dispatch
+  dispatch: store.dispatch,
+  createFirestoreInstance,
 }
 
 

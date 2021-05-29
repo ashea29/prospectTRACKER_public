@@ -1,17 +1,23 @@
-import React from 'react'
-import { isEmpty, isLoaded } from 'react-redux-firebase'
+import { useState } from 'react'
+import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
 import { Redirect, Route } from 'react-router-dom'
-import { useAppSelector } from '../state/hooks'
+import { selectIsAuthenticated } from '../state/auth/auth'
+import { useAppDispatch, useAppSelector } from '../state/hooks'
 
 
 const ProtectedRoute = ({ children, ...remainingProps }) => {
   const auth = useAppSelector((state) => state.firebase.auth)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  // const dispatch = useAppDispatch()
+  const firebase = useFirebase()
+
+  const currentUser = localStorage.getItem('session')
 
   return (
     <Route 
       {...remainingProps}
       render={({ location }) => 
-        isLoaded(auth) && !isEmpty(auth) ? (
+        !auth.isEmpty || currentUser ? (
           children
         ) : (
           <Redirect 
