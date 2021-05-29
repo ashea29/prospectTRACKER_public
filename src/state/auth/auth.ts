@@ -18,7 +18,7 @@ interface AuthState {
   firstName?: String | null
   username?: String | null
   email?: String | null
-  error: AuthError
+  error: any
 }
 
 interface LoginCredentials {
@@ -49,40 +49,42 @@ const initialState: AuthState = {
   firstName: null, 
   username: null, 
   email: null,
-  error: {
-    errorCode: null,
-    message: ''
-  }
+  error: null
 }
 
+
+// THUNKS
 export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, thunkAPI: ThunkAPI) => {
     const dispatch = thunkAPI.dispatch
     const firebase = await thunkAPI.extra.getFirebase()
+    const firestore = await thunkAPI.extra.getFirestore()
 
-    // put axios call here
-    const token = await axios({
-      method: 'POST',
-      url: process.env.LOGIN_URL,
-      data: {
-        email: credentials.email,
-        password: credentials.password
-      }
-    })
-    const user = await firebase.auth().signInWithCustomToken(token.data)
-    console.log(user)
+    try {
+      const token = await axios({
+        method: 'POST',
+        url: process.env.LOGIN_URL,
+        data: {
+          email: credentials.email,
+          password: credentials.password
+        }
+      })
+      const user = await firebase.auth().signInWithCustomToken(token.data)
+      console.log(user)
+  
+      // dispatch(SET_AUTH_USERDATA({
+      //   firstName, 
+      //   username, 
+      //   email
+      // }))
+  
+      // console.log(`These are credentials: ${JSON.stringify(credentials)}`)
+      // console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
+    } catch (error) {
+        dispatch(SET_AUTH_ERROR(error))
+    }
     
-    // const { firstName, username, email } = await firebase.auth().currentUser
-
-    // dispatch(SET_AUTH_USERDATA({
-    //   firstName, 
-    //   username, 
-    //   email
-    // }))
-
-    // console.log(`These are credentials: ${JSON.stringify(credentials)}`)
-    // console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
   }
 )
 export const signup = createAsyncThunk(
@@ -90,12 +92,8 @@ export const signup = createAsyncThunk(
   async (signupData: SignupData, thunkAPI: ThunkAPI) => {
     const dispatch = thunkAPI.dispatch
     const firebase = await thunkAPI.extra.getFirebase()
-    const firestore = await thunkAPI.extra.getFirestore()
-    
-    console.log(`This is firestore: ${firestore}`)
 
     try {
-      // put axios call here
       const token = await axios({
         method: 'POST',
         url: process.env.SIGNUP_URL,
@@ -108,22 +106,16 @@ export const signup = createAsyncThunk(
         }
       })
       // console.log(token)
-      const user = await firebase.auth().signInWithCustomToken(token.data.token)
-      console.log(`USER: ${JSON.stringify(user)}`)
-     
-      
-      // const { firstName, username, email } = await firebase.auth().currentUser
+      /*const user = */
+      await firebase.auth().signInWithCustomToken(token.data.token)
+      // console.log(`USER: ${JSON.stringify(user)}`)
       const currentUser = await firebase.auth().currentUser
-      console.log(`Current user before update: ${JSON.stringify(currentUser)}`)
-  
+      // console.log(`Current user before update: ${JSON.stringify(currentUser)}`)
       await currentUser.updateEmail(signupData.email)
-      await currentUser.updateProfile({displayName: signupData.firstName}).then(() => console.log(currentUser))
+      await currentUser.updateProfile({displayName: signupData.username})
+        // .then(() => console.log(currentUser))
       localStorage.setItem('session', JSON.stringify(currentUser))
   
-      // const idToken = await firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
-      // console.log(`ID Token: ${idToken}`)
-  
-      // console.log(`Updated Account: ${updatedAccount}`)
       // dispatch(SET_AUTH_USERDATA({
       //   firstName, 
       //   username, 
@@ -133,10 +125,8 @@ export const signup = createAsyncThunk(
       // console.log(`These are credentials: ${JSON.stringify(signupData)}`)
       // console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
     } catch (error) {
-      console.log(`Signup thunk error: ${error}`)
+        dispatch(SET_AUTH_ERROR(error))
     }
-  
-    
   }
 )
 export const logout = createAsyncThunk(
@@ -173,6 +163,9 @@ const authSlice = createSlice({
     },
     SET_AUTHENTICATED: (state, { payload }) => {
       state.isAuthenticated = payload
+    },
+    SET_AUTH_ERROR: (state, { payload }) => {
+      state.error = payload
     },
   },
   extraReducers: (builder) => {
@@ -219,15 +212,21 @@ const authSlice = createSlice({
   }
 })
 
-export const { SET_AUTH_USERDATA, SET_AUTHENTICATED } = authSlice.actions
+export const { SET_AUTH_USERDATA, SET_AUTHENTICATED, SET_AUTH_ERROR, SET_FIRSTLOGIN } = authSlice.actions
 
+
+export const selectAuthUserData = createSelector(
+  (state: RootState) => state.auth, 
+  (userdata) => userdata
+)
 
 export const selectFirstName = createSelector(
-  (state: RootState) => state.auth.userIdentifiers?.firstName, 
+  (state: RootState) => state.auth.firstName, 
   (firstName) => firstName
 )
+
 export const selectUsername = createSelector(
-  (state: RootState) => state.auth.userIdentifiers?.username, 
+  (state: RootState) => state.auth.username, 
   (username) => username
 )
 
@@ -235,5 +234,11 @@ export const selectIsAuthenticated = createSelector(
   (state: RootState) => state.auth.isAuthenticated,
   (isAuthenticated) => isAuthenticated
 )
+
+export const selectAuthError = createSelector(
+  (state: RootState) => state.auth.error,
+  (error) => error
+)
+
 
 export default authSlice.reducer
