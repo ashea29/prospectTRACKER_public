@@ -1,16 +1,20 @@
-import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
 import { createFirestoreInstance } from "redux-firestore"
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 import store from './state/configureStore'
 import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
 import firebaseConfig from './state/fbconfig'
 import App from './App'
+import LoadingSpinner from './shared/LoadingSpinner'
 
+
+const persistor = persistStore(store)
 
 const rrfConfig = {
   userProfile: "users",
@@ -33,9 +37,11 @@ const rrfProps = {
 ReactDOM.render(
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <Router>
-          <App />
-        </Router>
+        <PersistGate loading={<LoadingSpinner />} persistor={persistor}>
+          <Router>
+            <App />
+          </Router>
+        </PersistGate>
       </ReactReduxFirebaseProvider>
     </Provider>,
    document.getElementById('root')
