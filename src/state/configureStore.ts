@@ -1,13 +1,31 @@
 import { configureStore} from '@reduxjs/toolkit'
-import { getFirebase } from 'react-redux-firebase'
-import { getFirestore } from 'redux-firestore'
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import { getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase'
+import { getFirestore, constants as rfConstants } from 'redux-firestore'
 import rootReducer from './rootReducer'
 import logger from './middleware/logger'
 
 
+const persistConfig = {
+  key: 'root',
+  version: 1,
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 
 const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     thunk: {
       extraArgument: {
@@ -16,13 +34,24 @@ const store = configureStore({
       }
     },
     immutableCheck: true,
-    serializableCheck: false
+    serializableCheck: {
+        ignoredActions: [
+          ...Object.keys(rfConstants.actionTypes).map(
+            (type) => `${rfConstants.actionsPrefix}/${type}`
+          ),
+          ...Object.keys(rrfActionTypes).map(
+            (type) => `@@reactReduxFirebase/${type}`
+          ),
+          FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
+        ],
+        ignoredPaths: ['firebase', 'firestore', 'auth', 'auth.error']
+      }
   }).concat(logger),
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-export type getAppState = typeof store.getState
+
 
 
 export default store
