@@ -5,6 +5,7 @@ import { firebaseReducer, FirebaseReducer } from 'react-redux-firebase'
 import { firestoreReducer, FirestoreReducer } from 'redux-firestore'
 
 
+
 interface RootReducerTypes {
   firebase: FirebaseReducer.Reducer
   firestore: FirestoreReducer.Reducer

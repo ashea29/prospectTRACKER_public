@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import * as yup from 'yup'
 import SignupForm from '../components/SignupForm'
-import { selectAuthError, SET_AUTH_ERROR } from '../state/auth/auth'
-import { useAppDispatch, useAppSelector } from '../state/hooks'
+import { selectAuthError } from '../state/auth/auth'
+import { useAppSelector } from '../state/hooks'
 
 import './Signup.css'
 
@@ -23,16 +23,8 @@ const SignupSchema = yup.object().shape({
     .required('Confirm password is required'),
 })
 
-const Signup: React.FC = (props: any) => {
-  const dispatch = useAppDispatch()
-  const auth = useAppSelector((state) => state.firebase.auth)
-  // const { state = {} } = props.location
-  // const { from , message } = state
-
+const Signup: React.FC = () => {
   const message = useAppSelector(selectAuthError)
-  // useEffect(() => {
-  //   dispatch(SET_AUTH_ERROR(null))
-  // }, [])
   
   return (
     <div className='signup-container'>
@@ -40,7 +32,7 @@ const Signup: React.FC = (props: any) => {
         {message &&
           <div className='redirect-message'>{message}</div>
         }
-        <SignupForm schema={SignupSchema} authError={message}/>
+        <SignupForm schema={SignupSchema} />
       </div>
     </div>
   )

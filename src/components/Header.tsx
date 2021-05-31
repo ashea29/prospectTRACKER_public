@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
-import { Link, NavLink, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { selectIsAuthenticated, SET_AUTHENTICATED, SET_AUTH_ERROR } from '../state/auth/auth'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import './Header.css'
@@ -16,9 +16,9 @@ const Header = () => {
   const instanceAuth = firebase.auth()
 
   // const currentUser = localStorage.getItem('session')
-  const persistedState = JSON.parse(localStorage.getItem('persist:root'))
-  const persistedFirebase = JSON.parse(persistedState.firebase)
-  const authIsEmpty = persistedFirebase.auth.isEmpty
+  // const persistedState = JSON.parse(localStorage.getItem('persist:root'))
+  // const persistedFirebase = JSON.parse(persistedState.firebase)
+  // const authIsEmpty = persistedFirebase.auth.isEmpty
   // const authNotEmpty = instanceAuth.app.auth().currentUser
   // console.log(authIsEmpty)
 
@@ -37,7 +37,7 @@ const Header = () => {
         <h1 id="title">prospect<span className='title-span'>TRACKER</span></h1>
         <nav id="menu" className="navbar">
           <ul>              
-            {!authIsEmpty /*|| currentUser*/ ? (
+            {auth.isLoaded && !auth.isEmpty /*|| currentUser*/ ? (
                 <React.Fragment>
                   <li id="dashboard"><Link to='/dashboard'>Dashboard</Link></li>
                   <li id="createProspect"><Link to='/new-prospect'>Add New Prospect</Link></li>

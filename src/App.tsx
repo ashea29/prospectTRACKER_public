@@ -11,9 +11,12 @@ const Signup = React.lazy(() => import('./pages/Signup'))
 const NewProspect = React.lazy(() => import('./pages/NewProspect'))
 // import Dashboard from './pages/Dashboard'
 const Dashboard = React.lazy(() => import('./pages/Dashboard'))
+// import ProspectDetails from './pages/ProspectDetails'
+const ProspectDetails = React.lazy(() => import('./pages/ProspectDetails'))
+
 import ProtectedRoute from './shared/ProtectedRoute'
-import './App.css'
 import LoadingSpinner from './shared/LoadingSpinner'
+import './App.css'
 
 
 
@@ -31,6 +34,9 @@ const App: React.FC = () => {
           </ProtectedRoute>
           <ProtectedRoute exact path='/dashboard'>
             <Dashboard />
+          </ProtectedRoute>
+          <ProtectedRoute exact path='/prospects/:companyName'>
+            <ProspectDetails />
           </ProtectedRoute>
         </Switch>
       </Suspense>

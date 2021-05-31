@@ -1,8 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { RootState, AppDispatch } from '../configureStore'
 import { createSelector } from 'reselect'
-import firebase from 'firebase'
-import { useAppDispatch } from '../hooks'
 import axios from 'axios'
 
 
@@ -71,35 +69,32 @@ export const login = createAsyncThunk(
         }
       })
 
-      console.log(response)
-
-      if (response.data.code === 422) {
-        dispatch(SET_AUTH_ERROR('Login error occurred'))
+      if (response.data.code) {
+         dispatch(SET_AUTH_ERROR('Login error occurred'))
+         throw ('Login error occurred')
       } else {
-        const user = await firebase.auth().signInWithCustomToken(response.data.token)
-        console.log(user)
+         await firebase.auth().signInWithCustomToken(response.data.token)
+         const userData = await firestore.collection('users').where('email', '==', credentials.email).get()
+         if (!userData.docs.length) {
+           dispatch(SET_AUTH_ERROR('No data for this user, or user does not exist'))
+           throw ('No data for this user, or user does not exist')
+         }
+         dispatch(SET_AUTH_USERDATA({
+           firstName: userData.docs[0].firstName, 
+           username: userData.docs[0].username, 
+           email: userData.docs[0].email
+         }))
       }
-     
-  
-      // dispatch(SET_AUTH_USERDATA({
-      //   firstName, 
-      //   username, 
-      //   email
-      // }))
-  
-      // console.log(`These are credentials: ${JSON.stringify(credentials)}`)
-      // console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
     } catch (error) {
-        dispatch(SET_AUTH_ERROR(error.message))
+       throw error
     }
-    
   }
 )
+
 export const signup = createAsyncThunk(
   'auth/signup',
   async (signupData: SignupData, thunkAPI: ThunkAPI) => {
     const dispatch = thunkAPI.dispatch
-    const state = thunkAPI.getState()
     const firebase = await thunkAPI.extra.getFirebase()
 
     try {
@@ -114,43 +109,23 @@ export const signup = createAsyncThunk(
           confirmPassword: signupData.confirmPassword
         }
       })
-      // console.log(token)
-      /*const user = */
-      console.log(response)
 
       if (response.data.code) {
-        dispatch(SET_AUTH_ERROR('Sorry... something went wrong! Please try again.'))
-        // throw new Error('Sorry... something went wrong! Please try again.')
-        return
-      } else {
-        const user = await firebase.auth().signInWithCustomToken(response.data.token)
-        console.log(user)
-
-        const currentUser = await firebase.auth().currentUser
-        await currentUser.updateEmail(signupData.email)
-        await currentUser.updateProfile({displayName: signupData.username})
+          dispatch(SET_AUTH_ERROR('Sorry... something went wrong! Please try again.'))
+          throw ('Sorry... something went wrong! Please try again.')
+      } else if (response.data.token) {
+          await firebase.auth().signInWithCustomToken(response.data.token)
+          const currentUser = await firebase.auth().currentUser
+          await currentUser.updateEmail(signupData.email)
+          await currentUser.updateProfile({displayName: signupData.username})
+          dispatch(SET_AUTH_USERDATA({
+            firstName: signupData.firstName, 
+            username: signupData.username, 
+            email: signupData.email
+          }))
       }
-      // if (!state.auth.error) {
-        // await firebase.auth().signInWithCustomToken(token.data.token)
-        // // console.log(`USER: ${JSON.stringify(user)}`)
-        // const currentUser = await firebase.auth().currentUser
-        // // console.log(`Current user before update: ${JSON.stringify(currentUser)}`)
-        // await currentUser.updateEmail(signupData.email)
-        // await currentUser.updateProfile({displayName: signupData.username})
-          // .then(() => console.log(currentUser))
-        // localStorage.setItem('session', JSON.stringify(currentUser))
-    
-        // dispatch(SET_AUTH_USERDATA({
-        //   firstName, 
-        //   username, 
-        //   email
-        // }))
-    
-        // console.log(`These are credentials: ${JSON.stringify(signupData)}`)
-        // console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
       } catch (error) {
-        console.log(`From signup thunk catch: ${error}`)
-        //  dispatch(SET_AUTH_ERROR(error.message))
+        throw error
     }
   }
 )
@@ -161,16 +136,22 @@ export const logout = createAsyncThunk(
     const dispatch = thunkAPI.dispatch
     const firebase = await thunkAPI.extra.getFirebase()
 
-    dispatch(SET_AUTH_USERDATA({
-      firstName: null, 
-      username: null, 
-      email: null
-    }))
-
-    await firebase.auth().signOut()
-
-    console.log(`These are credentials: ${JSON.stringify(param)}`)
-    console.log(`This is Firebase: ${JSON.stringify(firebase.auth())}`)
+    try {
+      dispatch(SET_AUTH_USERDATA({
+        firstName: null, 
+        username: null, 
+        email: null
+      }))
+      dispatch(SET_AUTHENTICATED(false))
+      dispatch(SET_AUTH_ERROR(null))
+      localStorage.clear()
+      indexedDB.deleteDatabase('firebaseLocalStorageDb')
+  
+      await firebase.auth().signOut()
+      
+    } catch (error) {
+      throw error
+    }
   }
 )
 
