@@ -11,10 +11,11 @@ import "firebase/auth"
 import "firebase/firestore"
 import firebaseConfig from './state/fbconfig'
 import App from './App'
-import LoadingSpinner from './shared/LoadingSpinner'
+import AuthSpinner from './shared/AuthSpinner'
+import { useAppSelector } from './state/hooks'
 
 
-const persistor = persistStore(store)
+// const persistor = persistStore(store)
 
 const rrfConfig = {
   userProfile: "users",
@@ -30,18 +31,31 @@ const rrfProps = {
   firebase,
   config: rrfConfig,
   dispatch: store.dispatch,
-  createFirestoreInstance,
+  createFirestoreInstance
+}
+
+const AuthWrapper = ({ children }) => {
+  const auth = useAppSelector(state => state.firebase.auth)
+  if (!auth.isLoaded) {
+    return (
+      <AuthSpinner />
+    )
+  } else {
+    return (
+      children
+    )
+  }  
 }
 
 
 ReactDOM.render(
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <PersistGate loading={<LoadingSpinner />} persistor={persistor}>
-          <Router>
+        <Router>
+          <AuthWrapper>
             <App />
-          </Router>
-        </PersistGate>
+          </AuthWrapper>
+        </Router>
       </ReactReduxFirebaseProvider>
     </Provider>,
    document.getElementById('root')

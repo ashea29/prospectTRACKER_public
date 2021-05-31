@@ -2,12 +2,13 @@ import { Formik, Form, Field } from 'formik'
 import { Link, useHistory } from 'react-router-dom'
 import { useFirebase } from 'react-redux-firebase'
 import validator from 'validator'
+import { useAppDispatch } from '../state/hooks'
+import { login } from '../state/auth/auth'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
 
 import './LoginForm.css'
-import { useAppDispatch } from '../state/hooks'
-import { login } from '../state/auth/auth'
+
 
 
 const showError = (errorText: string) => {

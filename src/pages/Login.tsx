@@ -15,13 +15,7 @@ const LoginSchema = yup.object().shape({
 
 const Login: React.FC = (props: any) => {
   const { state = {} } = props.location
-  const { from , message } = state
-  const auth = useAppSelector((state) => state.firebase.auth)
-
-  // useEffect(() => {
-  //   console.log(`'FROM' prop: ${from}`)
-  //   console.log(`Auth: ${JSON.stringify(auth)}`)
-  // }, [])
+  const { message } = state
   
   return (
     <div className='login-container'>
