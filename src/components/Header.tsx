@@ -1,13 +1,13 @@
 import React from 'react'
 import { isEmpty, isLoaded, useFirebase } from 'react-redux-firebase'
 import { Link, useHistory } from 'react-router-dom'
-import { selectIsAuthenticated, SET_AUTHENTICATED, SET_AUTH_ERROR } from '../state/auth/auth'
+import { logout, selectIsAuthenticated, SET_AUTHENTICATED, SET_AUTH_ERROR } from '../state/auth/auth'
 import { useAppDispatch, useAppSelector } from '../state/hooks'
 import './Header.css'
 
 
 
-const Header = () => {
+const Header: React.FC = () => {
   const auth = useAppSelector((state) => state.firebase.auth)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const history = useHistory()
@@ -15,6 +15,8 @@ const Header = () => {
   const dispatch = useAppDispatch()
   const instanceAuth = firebase.auth()
 
+  
+  // console.log(location.pathname)
   // const currentUser = localStorage.getItem('session')
   // const persistedState = JSON.parse(localStorage.getItem('persist:root'))
   // const persistedFirebase = JSON.parse(persistedState.firebase)
@@ -23,11 +25,7 @@ const Header = () => {
   // console.log(authIsEmpty)
 
   const logoutHandler = async () => {
-    await Promise.resolve(dispatch(SET_AUTHENTICATED(false)))
-    await Promise.resolve(dispatch(SET_AUTH_ERROR(null)))
-    await Promise.resolve(localStorage.clear())
-    await Promise.resolve(indexedDB.deleteDatabase('firebaseLocalStorageDb'))
-    await firebase.logout()
+    await Promise.resolve(dispatch(logout()))
     history.replace('/')
   }
 

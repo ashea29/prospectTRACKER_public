@@ -12,6 +12,7 @@ interface AuthError {
 interface AuthState {
   isLoading: Boolean
   isAuthenticated: Boolean
+  isAdmin: boolean
   firstLogin: Boolean
   firstName?: String | null
   username?: String | null
@@ -43,6 +44,7 @@ interface ThunkAPI {
 const initialState: AuthState = {
   isLoading: false,
   isAuthenticated: false,
+  isAdmin: false,
   firstLogin: true, 
   firstName: null, 
   username: null, 
@@ -57,7 +59,6 @@ export const login = createAsyncThunk(
   async (credentials: LoginCredentials, thunkAPI: ThunkAPI) => {
     const dispatch = thunkAPI.dispatch
     const firebase = await thunkAPI.extra.getFirebase()
-    const firestore = await thunkAPI.extra.getFirestore()
 
     try {
       const response = await axios({
@@ -68,21 +69,15 @@ export const login = createAsyncThunk(
           password: credentials.password
         }
       })
-
       if (response.data.code) {
          dispatch(SET_AUTH_ERROR('Login error occurred'))
          throw ('Login error occurred')
-      } else {
+      } else if (response.data.token) {
          await firebase.auth().signInWithCustomToken(response.data.token)
-         const userData = await firestore.collection('users').where('email', '==', credentials.email).get()
-         if (!userData.docs.length) {
-           dispatch(SET_AUTH_ERROR('No data for this user, or user does not exist'))
-           throw ('No data for this user, or user does not exist')
-         }
          dispatch(SET_AUTH_USERDATA({
-           firstName: userData.docs[0].firstName, 
-           username: userData.docs[0].username, 
-           email: userData.docs[0].email
+           firstName: response.data.userData.firstName, 
+           username: response.data.userData.username, 
+           email: response.data.userData.email
          }))
       }
     } catch (error) {
@@ -109,19 +104,20 @@ export const signup = createAsyncThunk(
           confirmPassword: signupData.confirmPassword
         }
       })
-
+      console.log(response)
       if (response.data.code) {
-          dispatch(SET_AUTH_ERROR('Sorry... something went wrong! Please try again.'))
-          throw ('Sorry... something went wrong! Please try again.')
+          dispatch(SET_AUTH_ERROR(response.data.message))
+          throw (response.data.message)
       } else if (response.data.token) {
           await firebase.auth().signInWithCustomToken(response.data.token)
           const currentUser = await firebase.auth().currentUser
           await currentUser.updateEmail(signupData.email)
           await currentUser.updateProfile({displayName: signupData.username})
           dispatch(SET_AUTH_USERDATA({
-            firstName: signupData.firstName, 
-            username: signupData.username, 
-            email: signupData.email
+            firstName: response.data.userData.firstName, 
+            username: response.data.userData.username, 
+            email: response.data.userData.email,
+            isAdmin: response.data.userData.isAdmin
           }))
       }
       } catch (error) {
@@ -164,6 +160,7 @@ const authSlice = createSlice({
       state.firstName = payload.firstName
       state.username = payload.username
       state.email = payload.email
+      state.isAdmin = payload.isAdmin
     },
     SET_FIRSTLOGIN: (state, { payload }) => {
       state.firstLogin = payload

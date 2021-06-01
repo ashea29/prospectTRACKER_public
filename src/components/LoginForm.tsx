@@ -23,26 +23,27 @@ interface FormComponentProps {
   schema: object
 }
 
+interface SignInProps {
+  email: string
+  password: string
+}
+
 const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const firebase = useFirebase()
   
 
-  const signIn = async (props: { email: string, password: string}) => {
-    // try {
-    //   await firebase.login({
-    //     email: props.email,
-    //     password: props.password
-    //   })
-    //   history.push('/dashboard')
-    // } catch (error) {
-    //   console.log(error)
-    // } 
-    await dispatch(login({
-      email: props.email,
-      password: props.password
-    }))
+  const signIn = async (props: SignInProps) => {
+    const response: any = await dispatch(
+      login({
+        email: props.email,
+        password: props.password
+      })
+    )
+    if (!response.error) {
+      history.replace('/dashboard')
+    }
   }
 
 
@@ -58,18 +59,15 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
       validationSchema={schema}
       onSubmit={async (data, { setSubmitting, resetForm }) => {
-        // console.log(data);
         const sanitizedData = {
           email: validator.escape(data.email).trim(),
           password: validator.escape(data.password).trim(),
         }
         setSubmitting(true)
-        try {
-          await signIn({email: sanitizedData.email, password: sanitizedData.password})
-        } catch (error) {
-          console.log(error)
-        }
-        // history.push('/dashboard')
+        await signIn({
+          email: sanitizedData.email, 
+          password: sanitizedData.password
+        })
         setSubmitting(false)
         resetForm()
       }}
