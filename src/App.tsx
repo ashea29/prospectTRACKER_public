@@ -35,7 +35,7 @@ const App: React.FC = () => {
           <ProtectedRoute exact path='/dashboard'>
             <Dashboard />
           </ProtectedRoute>
-          <ProtectedRoute exact path='/prospects/:companyName'>
+          <ProtectedRoute path='/prospects/:companyName'>
             <ProspectDetails />
           </ProtectedRoute>
         </Switch>

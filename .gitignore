@@ -1,3 +1,5 @@
 node_modules/
 unused/
 .env
+fbconfig.ts
+/src/state/fbconfig.ts
