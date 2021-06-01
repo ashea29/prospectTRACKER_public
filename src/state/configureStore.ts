@@ -1,28 +1,10 @@
 import { configureStore} from '@reduxjs/toolkit'
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
 import { getFirebase, actionTypes as rrfActionTypes } from 'react-redux-firebase'
 import { getFirestore, constants as rfConstants } from 'redux-firestore'
 import rootReducer from './rootReducer'
 import logger from './middleware/logger'
 
 
-const persistConfig = {
-  key: 'root',
-  version: 1,
-  storage,
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 
 const store = configureStore({

@@ -3,8 +3,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase'
 import { createFirestoreInstance } from "redux-firestore"
-import { persistStore } from 'redux-persist'
-import { PersistGate } from 'redux-persist/integration/react'
 import store from './state/configureStore'
 import firebase from "firebase/app"
 import "firebase/auth"
@@ -15,7 +13,6 @@ import AuthSpinner from './shared/AuthSpinner'
 import { useAppSelector } from './state/hooks'
 
 
-// const persistor = persistStore(store)
 
 const rrfConfig = {
   userProfile: "users",
