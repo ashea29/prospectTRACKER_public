@@ -7,11 +7,20 @@ import store from './state/configureStore'
 import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/firestore"
-import firebaseConfig from './state/fbconfig'
 import App from './App'
 import AuthSpinner from './shared/AuthSpinner'
 import { useAppSelector } from './state/hooks'
 
+
+const fbConfig = {
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING,
+    appId: process.env.APP_ID,
+    measurementId: process.env.MEASUREMENT
+}
 
 
 const rrfConfig = {
@@ -20,7 +29,7 @@ const rrfConfig = {
   oneListenerPerPath: true
 };
 
-firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(fbConfig)
 firebase.firestore()
 
 
