@@ -37,7 +37,6 @@ const NewProspectForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
       validationSchema={schema}
       onSubmit={async (data, { setSubmitting, resetForm }) => {
-        // console.log(data);
         const sanitizedData = {
           firstName: validator.escape(data.companyName).trim(),
           address: validator.escape(data.address).trim(),
@@ -49,7 +48,6 @@ const NewProspectForm: React.FC<FormComponentProps> = ({ schema }) => {
         setSubmitting(true)
         await new Promise(() =>
           setTimeout(() => {
-            console.log(sanitizedData)
             setSubmitting(false)
             resetForm()
           }, 2000)

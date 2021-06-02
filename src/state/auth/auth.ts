@@ -174,43 +174,41 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(login.pending, (state, action) => {
-      // state.isLoading = true
-      console.log(`Pending action: ${action}`)
+      state.isLoading = true
     })
     builder.addCase(login.fulfilled, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       // state.firstLogin = false
       state.isAuthenticated = true
-      console.log(`Fulfilled action: ${action}`)
     })
     builder.addCase(login.rejected, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       console.log(`Rejected action: ${action}`)
     })
     builder.addCase(signup.pending, (state, action) => {
-      // state.isLoading = true
+      state.isLoading = true
       console.log(`Pending action: ${action}`)
     })
     builder.addCase(signup.fulfilled, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       state.isAuthenticated = true
       console.log(`Fulfilled action: ${action}`)
     })
     builder.addCase(signup.rejected, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       console.log(`Rejected action: ${action}`)
     })
     builder.addCase(logout.pending, (state, action) => {
-      // state.isLoading = true
+      state.isLoading = true
       console.log(`Pending action: ${action}`)
     })
     builder.addCase(logout.fulfilled, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       state.isAuthenticated = false
       console.log(`Fulfilled action: ${action}`)
     })
     builder.addCase(logout.rejected, (state, action) => {
-      // state.isLoading = false
+      state.isLoading = false
       console.log(`Rejected action: ${action}`)
     })
   }
