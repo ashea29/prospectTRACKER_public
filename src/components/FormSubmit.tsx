@@ -7,22 +7,16 @@ interface FormSubmitProps {
   conditional: boolean
 }
 
-const FormSubmit: React.FC<FormSubmitProps> = ({ conditional, submitButtonText, cancelButtonText, cancelNav }) => {
+const FormSubmit: React.FC<FormSubmitProps> = ({ conditional, submitButtonText }) => {
   return (
-    <div className="ion-padding-top ion-margin-top ion-text-center">
-    <div>
-      <button className="submit-button-custom"
+    <div id="submit_container">
+     <button className="submit-button"
         type="submit"
         disabled={conditional}
-        style={{ borderRadius: '50% !important' }}
       >
         {submitButtonText}
       </button>
-      <button onClick={cancelNav}>
-        {cancelButtonText}
-      </button>
     </div>
-  </div>
   );
 };
 

@@ -11,6 +11,6 @@
   padding: 2rem 3rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   color: #422132;
-  width: 19%;
-  height: 75%;
+  width: 20%;
+  height: max-content;
 }

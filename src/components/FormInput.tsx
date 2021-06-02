@@ -14,16 +14,15 @@ interface FormInputProps {
 const FormInput: React.FC<FormInputProps> = (props) => {
   // console.log(props);
   return (
-    <div>
-      <div>
-        <div>
-          <h3 
-            className="form-input-label"
+        <div className='input-container'>
+          <div 
+            className='form-input-label'
           >
             {props.placeholder}
-          </h3>
+          </div>
           <input 
-            id={props.id} 
+            id={props.id}
+            className='form-input' 
             name={props.name}
             value={props.value}
             onChange={props.onChange}
@@ -31,8 +30,6 @@ const FormInput: React.FC<FormInputProps> = (props) => {
             type={props.type}
           >
           </input>
-        </div>
-      </div>
     </div>
     
   );

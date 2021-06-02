@@ -84,7 +84,7 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
-        <Form className='ion-padding'>
+        <Form>
           <Field
               id='firstName'
               placeholder='First name'
@@ -142,7 +142,6 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
             ) : null}
             <FormSubmit submitButtonText="Sign Up" conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
             <div className="login-link-control">
-              <div>
                 <p>
                   Already registered?
                   <Link
@@ -151,7 +150,6 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
                   > Login
                   </Link>
                 </p>
-              </div>
             </div>
         </Form>
       )}
