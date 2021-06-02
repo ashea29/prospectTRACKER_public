@@ -1,7 +1,7 @@
 node_modules/
 unused/
 .env
-fbconfig.ts
-/src/state/fbconfig.ts
 /dist/
 dist/
+/src/state/fbconfig.ts
+fbconfig.ts
