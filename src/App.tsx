@@ -1,22 +1,15 @@
 import React, { Suspense } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
-// import Home from './pages/Home'
 const Home = React.lazy(() => import('./pages/Home'))
-// import Login from './pages/Login'
 const Login = React.lazy(() => import('./pages/Login'))
-// import Signup from './pages/Signup'
 const Signup = React.lazy(() => import('./pages/Signup'))
-// import NewProspect from './pages/NewProspect'
 const NewProspect = React.lazy(() => import('./pages/NewProspect'))
-// import Dashboard from './pages/Dashboard'
 const Dashboard = React.lazy(() => import('./pages/Dashboard'))
-// import ProspectDetails from './pages/ProspectDetails'
 const ProspectDetails = React.lazy(() => import('./pages/ProspectDetails'))
 
 import ProtectedRoute from './shared/ProtectedRoute'
 import LoadingSpinner from './shared/LoadingSpinner'
-import data from './pages/data'
 
 import './App.css'
 

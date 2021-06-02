@@ -3,3 +3,5 @@ unused/
 .env
 fbconfig.ts
 /src/state/fbconfig.ts
+/dist/
+dist/
