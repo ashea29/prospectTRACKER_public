@@ -16,6 +16,8 @@ const ProspectDetails = React.lazy(() => import('./pages/ProspectDetails'))
 
 import ProtectedRoute from './shared/ProtectedRoute'
 import LoadingSpinner from './shared/LoadingSpinner'
+import data from './pages/data'
+
 import './App.css'
 
 

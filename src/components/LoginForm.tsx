@@ -73,7 +73,7 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
-        <Form className='ion-padding'>
+        <Form>
             <Field
               id='email'
               placeholder='Email'
@@ -97,18 +97,16 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
               showError(errors.password)
             ) : null}
             <FormSubmit submitButtonText='Sign In' conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
-            <div className="ion-text-center ion-padding-top">
-              <div>
+              <div className='signup-link-container'>
                 <p>
                   No account yet? 
                   <Link 
-                    to='/signup-custom' 
-                    className="nav-link-custom"
+                    to='/signup' 
+                    className="nav-link"
                   > Sign Up
                   </Link>
                 </p>
               </div>
-            </div>
             {/* <IonRow>
               <IonCol>
                 <pre>{JSON.stringify(values, null, 2)}</pre>

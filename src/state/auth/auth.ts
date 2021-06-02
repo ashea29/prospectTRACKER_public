@@ -77,7 +77,8 @@ export const login = createAsyncThunk(
          dispatch(SET_AUTH_USERDATA({
            firstName: response.data.userData.firstName, 
            username: response.data.userData.username, 
-           email: response.data.userData.email
+           email: response.data.userData.email,
+           isAdmin: response.data.userData.isAdmin
          }))
       }
     } catch (error) {
@@ -104,7 +105,6 @@ export const signup = createAsyncThunk(
           confirmPassword: signupData.confirmPassword
         }
       })
-      console.log(response)
       if (response.data.code) {
           dispatch(SET_AUTH_ERROR(response.data.message))
           throw (response.data.message)

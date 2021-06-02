@@ -1,0 +1,17 @@
+.input-container {
+  margin-top: 1.5rem;
+}
+
+.form-input-label {
+  margin-bottom: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  color: #713956;
+  font-size: 1rem;
+}
+
+.form-input {
+  height: 2rem;
+  width: 100%;
+  border-radius: 3px;
+  padding: 0.2rem 0.5rem;
+}

@@ -6,8 +6,6 @@ import jobHunt from '../assets/images/jobHunt.svg'
 
 
 const Home: React.FC = () => {
-
-
   return (
     <React.Fragment>
         <div className="container">

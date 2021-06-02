@@ -9,20 +9,9 @@ import './Header.css'
 
 const Header: React.FC = () => {
   const auth = useAppSelector((state) => state.firebase.auth)
-  const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const history = useHistory()
-  const firebase = useFirebase()
   const dispatch = useAppDispatch()
-  const instanceAuth = firebase.auth()
 
-  
-  // console.log(location.pathname)
-  // const currentUser = localStorage.getItem('session')
-  // const persistedState = JSON.parse(localStorage.getItem('persist:root'))
-  // const persistedFirebase = JSON.parse(persistedState.firebase)
-  // const authIsEmpty = persistedFirebase.auth.isEmpty
-  // const authNotEmpty = instanceAuth.app.auth().currentUser
-  // console.log(authIsEmpty)
 
   const logoutHandler = async () => {
     await Promise.resolve(dispatch(logout()))

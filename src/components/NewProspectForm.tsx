@@ -57,7 +57,7 @@ const NewProspectForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
-        <Form className='ion-padding'>
+        <Form>
           <Field
               id='companyName'
               placeholder='Enter company name'
