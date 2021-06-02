@@ -6,6 +6,7 @@ import { useAppDispatch } from '../state/hooks'
 import { login } from '../state/auth/auth'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
+import LoadingSpinner from '../shared/LoadingSpinner'
 
 import './LoginForm.css'
 
@@ -73,46 +74,47 @@ const LoginForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
-        <Form>
-            <Field
-              id='email'
-              placeholder='Email'
-              name='email'
-              type='input'
-              value={values.email}
-              as={FormInput}
-            />
-            {errors.email && touched.email ? (
-              showError(errors.email)
-            ) : null}
-            <Field
-              id='password'
-              placeholder='Password'
-              name='password'
-              type='password'
-              value={values.password}
-              as={FormInput}
-            />
-            {errors.password && touched.password ? (
-              showError(errors.password)
-            ) : null}
-            <FormSubmit submitButtonText='Sign In' conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
-              <div className='signup-link-container'>
-                <p>
-                  No account yet? 
-                  <Link 
-                    to='/signup' 
-                    className="nav-link"
-                  > Sign Up
-                  </Link>
-                </p>
-              </div>
-            {/* <IonRow>
-              <IonCol>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
-              </IonCol>
-            </IonRow> */}
-        </Form>
+        !isSubmitting ? (
+          <Form>
+              <Field
+                id='email'
+                placeholder='Email'
+                name='email'
+                type='input'
+                value={values.email}
+                as={FormInput}
+              />
+              {errors.email && touched.email ? (
+                showError(errors.email)
+              ) : null}
+              <Field
+                id='password'
+                placeholder='Password'
+                name='password'
+                type='password'
+                value={values.password}
+                as={FormInput}
+              />
+              {errors.password && touched.password ? (
+                showError(errors.password)
+              ) : null}
+              <FormSubmit submitButtonText='Sign In' conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
+                <div className='signup-link-container'>
+                  <p>
+                    No account yet? 
+                    <Link 
+                      to='/signup' 
+                      className="nav-link"
+                    > Sign Up
+                    </Link>
+                  </p>
+                </div>
+          </Form>
+          ) : (
+            <div className='login-spinner-container'>
+              <LoadingSpinner />
+            </div>
+          )
       )}
     </Formik>
   )

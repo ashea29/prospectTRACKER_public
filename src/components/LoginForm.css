@@ -2,6 +2,17 @@
   font-family: 'Poppins', sans-serif;
 }
 
+
+.login-spinner-container {
+  width: 95%;
+  height: 15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .signup-link-container {
   font-size: 0.8rem;
+  text-align: center;
 }

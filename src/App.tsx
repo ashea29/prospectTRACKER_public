@@ -7,6 +7,7 @@ const Signup = React.lazy(() => import('./pages/Signup'))
 const NewProspect = React.lazy(() => import('./pages/NewProspect'))
 const Dashboard = React.lazy(() => import('./pages/Dashboard'))
 const ProspectDetails = React.lazy(() => import('./pages/ProspectDetails'))
+const NotFound = React.lazy(() => import('./pages/NotFound'))
 
 import ProtectedRoute from './shared/ProtectedRoute'
 import LoadingSpinner from './shared/LoadingSpinner'
@@ -33,6 +34,7 @@ const App: React.FC = () => {
           <ProtectedRoute path='/prospects/:companyName'>
             <ProspectDetails />
           </ProtectedRoute>
+          <Route path='*' component={NotFound}/>
         </Switch>
       </Suspense>
     </React.Fragment>
