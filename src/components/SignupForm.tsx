@@ -5,6 +5,7 @@ import { useAppDispatch } from '../state/hooks'
 import { signup } from '../state/auth/auth'
 import FormInput from './FormInput'
 import FormSubmit from './FormSubmit'
+import LoadingSpinner from '../shared/LoadingSpinner'
 
 import './SignupForm.css'
 
@@ -84,74 +85,80 @@ const SignupForm: React.FC<FormComponentProps> = ({ schema }) => {
       }}
     >
       {({ values, isSubmitting, errors, touched }) => (
-        <Form>
-          <Field
-              id='firstName'
-              placeholder='First name'
-              name='firstName'
-              type='input'
-              value={values.firstName}
-              as={FormInput}
-            />
-            {errors.firstName && touched.firstName ? (
-              showError(errors.firstName)
-            ) : null}
-          <Field
-              id='username'
-              placeholder='Choose a username'
-              name='username'
-              type='input'
-              value={values.username}
-              as={FormInput}
-            />
-            {errors.username && touched.username ? (
-              showError(errors.username)
-            ) : null}
-          <Field
-              id='email'
-              placeholder='Enter email'
-              name='email'
-              type='email'
-              value={values.email}
-              as={FormInput}
-            />
-            {errors.email && touched.email ? (
-              showError(errors.email)
-            ) : null}
+        !isSubmitting ? (
+          <Form>
             <Field
-              id='password'
-              placeholder='Password'
-              name='password'
-              type='password'
-              value={values.password}
-              as={FormInput}
-            />
-            {errors.password && touched.password ? (
-              showError(errors.password)
-            ) : null}
+                id='firstName'
+                placeholder='First name'
+                name='firstName'
+                type='input'
+                value={values.firstName}
+                as={FormInput}
+              />
+              {errors.firstName && touched.firstName ? (
+                showError(errors.firstName)
+              ) : null}
             <Field
-              id='confirm-password'
-              placeholder='Confirm password'
-              name='confirmPassword'
-              type='password'
-              value={values.confirmPassword}
-              as={FormInput}
-            />
-            {errors.confirmPassword && touched.confirmPassword ? (
-              showError(errors.confirmPassword)
-            ) : null}
-            <FormSubmit submitButtonText="Sign Up" conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
-            <div className="login-link-control">
-                <p>
-                  Already registered?
-                  <Link
-                    to='/login'
-                    className="nav-link-custom"
-                  > Login
-                  </Link>
-                </p>
+                id='username'
+                placeholder='Choose a username'
+                name='username'
+                type='input'
+                value={values.username}
+                as={FormInput}
+              />
+              {errors.username && touched.username ? (
+                showError(errors.username)
+              ) : null}
+            <Field
+                id='email'
+                placeholder='Enter email'
+                name='email'
+                type='email'
+                value={values.email}
+                as={FormInput}
+              />
+              {errors.email && touched.email ? (
+                showError(errors.email)
+              ) : null}
+              <Field
+                id='password'
+                placeholder='Password'
+                name='password'
+                type='password'
+                value={values.password}
+                as={FormInput}
+              />
+              {errors.password && touched.password ? (
+                showError(errors.password)
+              ) : null}
+              <Field
+                id='confirm-password'
+                placeholder='Confirm password'
+                name='confirmPassword'
+                type='password'
+                value={values.confirmPassword}
+                as={FormInput}
+              />
+              {errors.confirmPassword && touched.confirmPassword ? (
+                showError(errors.confirmPassword)
+              ) : null}
+              <FormSubmit submitButtonText="Sign Up" conditional={isSubmitting} cancelButtonText='Cancel' cancelNav={handleBackNavigation}/>
+              <div className="login-link-container">
+                  <p>
+                    Already registered?
+                    <Link
+                      to='/login'
+                      className="nav-link-custom"
+                    > Login
+                    </Link>
+                  </p>
+              </div>
+          </Form>
+          ) : (
+            <div className='signup-spinner-container'>
+              <LoadingSpinner />
             </div>
-        </Form>
+          )
       )}
     </Formik>
   )

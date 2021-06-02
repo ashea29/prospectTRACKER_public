@@ -1,3 +1,17 @@
 * {
   font-family: 'Poppins', sans-serif;
 }
+
+.signup-spinner-container {
+  width: 95%;
+  height: 30rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.login-link-container {
+  font-size: 0.8rem;
+  text-align: center;
+}
