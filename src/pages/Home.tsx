@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './Home.css'
-import './svg-styles.css'
 import jobHunt from '../assets/images/jobHunt.svg'
 
 
