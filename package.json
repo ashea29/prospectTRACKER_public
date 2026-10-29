@@ -36,7 +36,7 @@
     "webpack-dev-server": "^4.6.0"
   },
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.11.4",
+    "@googlemaps/js-api-loader": "^1.15.1",
     "@reduxjs/toolkit": "^1.5.1",
     "@types/axios": "^0.14.0",
     "@types/dotenv-webpack": "^7.0.2",
